@@ -1,0 +1,39 @@
+format = """
+[$directory](white)($git_branch$git_state$git_status$git_metrics)
+$hostname@$username [»](bold green) """
+
+[git_branch]
+style = "bold green"
+format = "[\\[[$symbol$branch$tag](bold green)\\]](bold white)"
+symbol = "\ue725 "
+
+[git_status]
+format = ' ([\[$conflicted$deleted$renamed$modified$staged$untracked$ahead_behind\]]($style))'
+
+[directory]
+style = "bold blue"
+truncate_to_repo = false
+
+[python]
+scan_for_pyfiles = false
+
+[ruby]
+disabled = true
+
+[swift]
+disabled = true
+
+[hostname]
+ssh_only = false
+format = "[$hostname]($style)"
+style = "bold white"
+
+[username]
+show_always = true
+style_user = "bold white"
+format = "[$user]($style)"
+
+[time]
+disabled = false
+format = "[$time]($style)"
+time_format = "%H:%M"
