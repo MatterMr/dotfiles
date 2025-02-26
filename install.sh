@@ -38,7 +38,6 @@ brew install neovim
 brew install tmux
 brew install starship
 brew install zsh-autosuggestions
-# brew install zsh-fast-syntax-highlighting #consider uninstalling due to macOS slowdown
 brew install zoxide
 
 ### Fun
@@ -61,11 +60,13 @@ echo "Installing Brew Casks..."
 brew install --cask kitty
 brew install --cask utm
 brew install --cask vlc
+brew install --cask discord
 brew install --cask betterdiscord-installer
 brew install --cask alfred
 brew install --cask firefox
-brwe install --cask notion
+brew install --cask notion
 brew install --cask mullvadvpn
+brew install --cask obsidian
 
 ## Fonts
 brew install --cask sf-symbols
@@ -122,6 +123,7 @@ defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
 defaults write -g NSWindowShouldDragOnGesture YES
 
 # Plant configuration files
+echo "Planting configuration files"
 stow .
 
 # Starting Services
