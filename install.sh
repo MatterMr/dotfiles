@@ -38,7 +38,7 @@ brew install neovim
 brew install tmux
 brew install starship
 brew install zsh-autosuggestions
-brew install zsh-fast-syntax-highlighting
+# brew install zsh-fast-syntax-highlighting #consider uninstalling due to macOS slowdown
 brew install zoxide
 
 ### Fun
@@ -51,7 +51,7 @@ brew install spotify_player
 
 ### Dev
 brew install cmake
-brew install eake
+brew install make
 brew install ripgrep
 brew install pyenv
 
@@ -122,7 +122,7 @@ defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
 defaults write -g NSWindowShouldDragOnGesture YES
 
 # Plant configuration files
-
+stow .
 
 # Starting Services
 brew services start borders

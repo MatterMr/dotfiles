@@ -72,6 +72,7 @@ return {
     })
     luasnip.config.set_config({
       enable_autosnippets = true,
+      updateevents = "Textchanged,TextchangedI",
       store_selection_keys = "<Tab>",
     })
 
