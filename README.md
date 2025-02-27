@@ -2,7 +2,7 @@
 
 Here is my MacOS setup, using the [Iceberg Theme](https://cocopon.github.io/iceberg.vim/) for inspiration.
 
-![Screenshot of desktop setup](/.assets/Example.png)
+![Screenshot of desktop setup](/.assets/example.png)
 
 # Installation
 
