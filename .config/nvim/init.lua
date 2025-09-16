@@ -1,3 +1,2 @@
-require("config.lazy")
-require("config.options")
-require("config.keymaps")
+require("mattermr.core")
+require("mattermr.lazy")
