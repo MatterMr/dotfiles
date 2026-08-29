@@ -1,0 +1,36 @@
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+{
+  xdg.configFile."nvim".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/.config/nvim";
+  home.shellAliases = {
+    "vim" = "nvim";
+  };
+  home.packages = with pkgs; [
+    neovim
+    # Lazy Dependencies
+    git
+    lazygit
+    ripgrep
+    fzf
+    luaPackages.tree-sitter-cli
+    gcc
+    wget
+    unzip
+    imagemagick
+    python3
+    rustc
+    cargo
+    nodejs
+
+    # LSP
+    stylua
+    nixfmt
+
+  ];
+
+}
