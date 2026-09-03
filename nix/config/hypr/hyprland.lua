@@ -19,23 +19,50 @@
 ------------------
 -- this is a test
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
+local set_monitor_scale = function()
+	local scale = 2
+	if hl.get_monitor("DP-3").height == 1440 then
+		scale = 1
+	end
+	hl.monitor({
+		output = "DP-3",
+		mode = "prefered",
+		position = "auto",
+		scale = scale,
+		bitdepth = 10,
+		vrr = 2,
+	})
+end
+
 hl.monitor({
 	output = "DP-3",
 	mode = "prefered",
 	position = "auto",
 	scale = 2,
 	bitdepth = 10,
-	vrr = 1,
+	vrr = 2,
 })
+
+hl.on("monitor.added", set_monitor_scale)
 
 hl.config({
 	xwayland = {
 		force_zero_scaling = true,
 	},
+	render = {
+		direct_scanout = 0,
+	},
+	-- plugin = {
+	-- 	csgo_vulkan_fix = {
+	-- 		fix_mouse = true,
+	-- 	},
+	-- },
 })
----------------------
----- MY PROGRAMS ----
----------------------
+-- hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "cs2", w = 1650, h = 1050 })
+-- hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "myapp", w = 1920, h = 1080 })
+-------------------
+-- MY PROGRAMS ----
+-------------------
 
 -- Set programs that you use
 local terminal = "kitty"
@@ -105,7 +132,7 @@ hl.config({
 		resize_on_border = false,
 
 		-- Please see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/ before you turn this on
-		allow_tearing = true,
+		allow_tearing = false,
 
 		layout = "dwindle",
 	},
@@ -331,9 +358,7 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 
 -- Example window rules that are useful
 
-hl.window_rule({ match = { xdg_tag = "proton-game" }, immediate = true })
-hl.window_rule({ match = { class = "discovery-d%.exe" }, immediate = true })
-hl.window_rule({ match = { class = ".*" }, immediate = true })
+hl.window_rule({ match = { xdg_tag = "proton-game" } })
 
 local suppressMaximizeRule = hl.window_rule({
 	-- Ignore maximize requests from all apps. You'll probably like this.

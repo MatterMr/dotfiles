@@ -3,14 +3,18 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   pkgs,
-  inputs,
-  config,
+  nix-cachyos-kernel,
   ...
 }:
 {
+  # Use CachyOS Kernel
+  nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned ];
+  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+
   imports = [
     # Include the results of the hardware scan.
-    ./hardware-configuration.nix
+    	/etc/nixos/hardware-configuration.nix
+	"${config.home.homeDirectory}/.dotfiles/nix/modules/nixos/hyprland.nix"
   ];
 
   nix.settings.experimental-features = [
@@ -18,24 +22,22 @@
     "flakes"
   ];
 
+  # Set the default shell to fish
+  programs.fish.enable = true;
+  users.users.mattermr.shell = pkgs.fish;
+
+  # Fonts
+  fonts.packages = with pkgs; [
+    nerd-fonts.hack
+  ];
+
   # Programs
   environment.systemPackages = with pkgs; [
     pwvucontrol
   ];
-
   programs.steam = {
     enable = true;
-    package = pkgs.steam.override {
-      extraArgs = "-forcedesktopscaling 2";
-    };
   };
-
-  programs.fish.enable = true;
-  users.users.mattermr.shell = pkgs.fish;
-
-  fonts.packages = with pkgs; [
-    nerd-fonts.hack
-  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -83,7 +85,6 @@
       "networkmanager"
       "wheel"
     ];
-    packages = with pkgs; [ ];
   };
 
   # Allow unfree packages

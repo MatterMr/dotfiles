@@ -29,21 +29,13 @@
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
-            (
-              { pkgs, ... }:
-              {
-                nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned ];
-                boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
-              }
-            )
-            ./configuration.nix
-            ./hyprland.nix
+            ./hosts/nixos/greynix/configuration.nix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.mattermr = ./home.nix;
+              home-manager.users.mattermr = ./modules/home/nixos;
               home-manager.backupFileExtension = "backup";
             }
           ];

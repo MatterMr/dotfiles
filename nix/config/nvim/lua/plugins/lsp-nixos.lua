@@ -12,6 +12,22 @@ return {
         nil_ls = {},
         yamlls = {},
         ocamllsp = {},
+        lua_ls = {
+          settings = {
+            Lua = {
+              runtime = { version = "Lua 5.4" }, -- Hyprland embeds standard Lua; confirm vs repo
+              workspace = {
+                checkThirdParty = false,
+                library = {
+                  "/run/current-system/sw/share/hypr",
+                },
+              },
+              diagnostics = {
+                globals = { "vim", "hl" }, -- silence "undefined global hl" if defs aren't loaded
+              },
+            },
+          },
+        },
         -- -- javascript
         --   eslint = {
         -- tailwindcss = {},
