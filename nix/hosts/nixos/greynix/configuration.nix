@@ -3,6 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   pkgs,
+  config,
   nix-cachyos-kernel,
   ...
 }:
@@ -13,7 +14,7 @@
 
   imports = [
     # Include the results of the hardware scan.
-    	/etc/nixos/hardware-configuration.nix
+    	./hardware-configuration.nix
 	"${config.home.homeDirectory}/.dotfiles/nix/modules/nixos/hyprland.nix"
   ];
 
