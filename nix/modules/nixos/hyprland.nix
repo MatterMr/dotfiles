@@ -7,18 +7,11 @@
 with lib;
 let
   pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-  hyprPluginPkgs = inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
-  hypr-plugin-dir = pkgs.symlinkJoin {
-    name = "hyrpland-plugins";
-    paths = with hyprPluginPkgs; [
-      csgo-vulkan-fix
-    ];
-  };
 in
 {
-  environment.sessionVariables = {
-    HYPR_PLUGIN_DIR = hypr-plugin-dir;
-  };
+  # environment.sessionVariables = {
+  #   HYPR_PLUGIN_DIR = hypr-plugin-dir;
+  # };
   environment.systemPackages = with pkgs; [
     nwg-displays
   ];

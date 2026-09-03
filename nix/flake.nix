@@ -19,8 +19,8 @@
   outputs =
     inputs@{
       nixpkgs,
+nix-cachyos-kernel,
       home-manager,
-      nix-cachyos-kernel,
       ...
     }:
     {
@@ -35,7 +35,7 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.mattermr = ./modules/home/nixos;
+              home-manager.users.mattermr = ./home-manager/nixos;
               home-manager.backupFileExtension = "backup";
             }
           ];

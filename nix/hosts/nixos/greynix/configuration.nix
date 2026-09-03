@@ -2,20 +2,21 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
+inputs,
+nixpkgs,
   pkgs,
-  config,
   nix-cachyos-kernel,
   ...
 }:
 {
   # Use CachyOS Kernel
-  nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned ];
+  nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
 
   imports = [
     # Include the results of the hardware scan.
     	./hardware-configuration.nix
-	"${config.home.homeDirectory}/.dotfiles/nix/modules/nixos/hyprland.nix"
+	../../../modules/nixos/hyprland.nix
   ];
 
   nix.settings.experimental-features = [
