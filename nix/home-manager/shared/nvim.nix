@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   config,
   ...
 }:
@@ -31,9 +30,13 @@
     # LSP
     lua-language-server
     nil
+    rust-analyzer
+    ocamlPackages.ocaml-lsp
+
     # Formatter
     stylua
     nixfmt
+    ocamlformat
 
   ];
 
