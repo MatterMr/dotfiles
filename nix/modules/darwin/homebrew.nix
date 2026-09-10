@@ -12,8 +12,8 @@
       "skim"
       "claude"
       "docker-desktop"
-			"mullvad-vpn@beta"
-			"wireshark-app"
+      "mullvad-vpn@beta"
+      "wireshark-app"
     ];
     brews = [ ];
     masApps = { };
