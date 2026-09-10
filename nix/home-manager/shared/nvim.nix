@@ -12,11 +12,17 @@
   };
   home.packages = with pkgs; [
     neovim
+
+    # pdf viewer
+    # zathura
+    # zathuraPkgs.zathura_pdf_poppler
+
     # Lazy Dependencies
     git
     lazygit
     ripgrep
     fzf
+    fd
     luaPackages.tree-sitter-cli
     gcc
     wget
