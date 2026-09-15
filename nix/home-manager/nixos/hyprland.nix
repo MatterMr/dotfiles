@@ -16,7 +16,7 @@
     MOZ_ENABLE_WAYLAND = "1";
     PROTON_ENABLE_WAYLAND = "1";
     PROTON_FSR4_UPGRADE = "1";
-    MANGOHUD = "1";
+    # MANGOHUD = "1";
   };
 
   xdg.configFile."uwsm/env".source =

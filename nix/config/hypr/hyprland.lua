@@ -90,9 +90,9 @@ local menu = "hyprlauncher"
 
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Environment-variables/
 hl.env("GDK_SCALE", "2")
-hl.env("XCURSOR_SIZE", "16")
+hl.env("XCURSOR_SIZE", "20")
 hl.env("HYPRCURSOR_THEME", "oblique-cursor-dark")
-hl.env("HYPRCURSOR_SIZE", "16")
+hl.env("HYPRCURSOR_SIZE", "20")
 -----------------------
 ----- PERMISSIONS -----
 -----------------------
@@ -316,8 +316,8 @@ hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 
 -- Move/resize windows with mainMod + LMB/RMB and dragging
-hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
-hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
+-- hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
+-- hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Laptop multimedia keys for volume and LCD brightness
 hl.bind(
