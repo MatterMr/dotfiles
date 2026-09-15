@@ -14,7 +14,6 @@
   system.stateVersion = 6;
   programs.fish.enable = true;
   nix.package = pkgs.nix;
-  nix.linux-builder.enable = true;
   nix.settings.trusted-users = [ "@admin" ];
   # System Settings
   system.primaryUser = "mattermr";
@@ -54,11 +53,26 @@
   #     StandardErrorPath = "/var/log/obsidian-sync.err";
   #   };
   # };
+  nixpkgs.overlays = [
+    (final: prev: {
+      yabai = prev.yabai.overrideAttrs (old: {
+        version = "AhsanFazal-ad0a12d";
+        doInstallCheck = false;
+        src = final.fetchFromGitHub {
+          owner = "AhsanFazal";
+          repo = "yabai";
+          rev = "ad0a12d63f639534a296a1d065b0d04979f1b4db";
+          hash = "sha256-CFC9KuBw7oyOjL5t8D+JIdk6/cdSh91J/K/8XA3v3aE=";
+        };
+      });
+    })
+  ];
 
   # Window manager config
   services.yabai = {
     enable = true;
     enableScriptingAddition = true;
+    package = pkgs.yabai;
   };
   services.skhd.enable = true;
   services.jankyborders = {

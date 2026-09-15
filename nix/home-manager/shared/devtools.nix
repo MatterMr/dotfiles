@@ -14,5 +14,6 @@
     # md to pdf compliation
     pandoc
 
+    gitlab-runner
   ];
 }
