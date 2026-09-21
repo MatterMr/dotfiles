@@ -5,6 +5,7 @@
   ...
 }:
 {
+  imports = [ inputs.walker.homeManagerModules.default ];
   xdg.configFile."hypr/hyprland.lua".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/nix/config/hypr/hyprland.lua";
 
@@ -15,13 +16,25 @@
     SDL_VIDEODRIVER = "wayland,x11";
     MOZ_ENABLE_WAYLAND = "1";
     PROTON_ENABLE_WAYLAND = "1";
+    PROTON_USE_NTSYNC = "1";
     PROTON_FSR4_UPGRADE = "1";
-    # MANGOHUD = "1";
+    MANGOHUD = "1";
   };
 
   xdg.configFile."uwsm/env".source =
     "${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh";
 
+  # services.walker = {
+  #   enable = true;
+  #   systemd.enable = true;
+  #   settings = {
+  #     app_launch_prefix = "uwsm app --";
+  #   };
+  # };
+  # programs.walker = {
+  #   enable = true;
+  #   runAsService = true;
+  # };
   services.hyprlauncher = {
     enable = true;
     settings = {
@@ -41,6 +54,7 @@
       };
     };
   };
+
   services.dunst.enable = true;
   services.pipewire = {
     enable = true;

@@ -21,6 +21,7 @@
     mangohud
     gamescope
     gamemode
+    nautilus
   ];
 
   programs.fish = {
@@ -43,6 +44,8 @@
   };
 
   programs.vesktop.enable = true;
+  programs.obsidian.enable = true;
+  programs.mullvad-vpn.enable = true;
 
   xdg.configFile."MangoHud/MangoHud.conf".text = ''
             		toggle_hud=Shift_R+F12
