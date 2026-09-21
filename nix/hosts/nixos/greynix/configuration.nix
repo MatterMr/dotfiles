@@ -2,8 +2,8 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
-inputs,
-nixpkgs,
+  inputs,
+  nixpkgs,
   pkgs,
   nix-cachyos-kernel,
   ...
@@ -12,11 +12,12 @@ nixpkgs,
   # Use CachyOS Kernel
   nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+  boot.kernelModules = [ "ntsync" ];
 
   imports = [
     # Include the results of the hardware scan.
-    	./hardware-configuration.nix
-	../../../modules/nixos/hyprland.nix
+    ./hardware-configuration.nix
+    ../../../modules/nixos/hyprland.nix
   ];
 
   nix.settings.experimental-features = [
@@ -79,6 +80,10 @@ nixpkgs,
     variant = "";
   };
 
+  services.devmon.enable = true;
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
+  services.mullvad-vpn.enable = true;
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."mattermr" = {
     isNormalUser = true;
