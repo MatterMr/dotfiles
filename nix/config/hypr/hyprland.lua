@@ -19,38 +19,38 @@
 ------------------
 -- this is a test
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
-local set_monitor_scale = function()
-	local scale = 2
-	if hl.get_monitor("DP-3").height == 1440 then
-		scale = 1
-	end
-	hl.monitor({
-		output = "DP-3",
-		mode = "prefered",
-		position = "auto",
-		scale = scale,
-		bitdepth = 10,
-		vrr = 2,
-	})
-end
+-- local set_monitor_scale = function()
+-- 	local scale = 2
+-- 	if hl.get_monitor("DP-3").height == 1440 then
+-- 		scale = 1
+-- 	end
+-- 	hl.monitor({
+-- 		output = "DP-3",
+-- 		mode = "prefered",
+-- 		position = "auto",
+-- 		scale = scale,
+-- 		bitdepth = 10,
+-- 		vrr = 2,
+-- 	})
+-- end
 
 hl.monitor({
 	output = "DP-3",
 	mode = "prefered",
 	position = "auto",
 	scale = 2,
-	bitdepth = 10,
+	bitdepth = 8,
 	vrr = 2,
 })
 
-hl.on("monitor.added", set_monitor_scale)
+-- hl.on("monitor.added", set_monitor_scale)
 
 hl.config({
 	xwayland = {
 		force_zero_scaling = true,
 	},
 	render = {
-		direct_scanout = 0,
+		direct_scanout = 1,
 	},
 	-- plugin = {
 	-- 	csgo_vulkan_fix = {
@@ -256,6 +256,7 @@ hl.config({
 		kb_rules = "",
 
 		follow_mouse = 1,
+		sensitivity = 0,
 		accel_profile = "flat",
 
 		touchpad = {
@@ -266,11 +267,6 @@ hl.config({
 
 -- Example per-device config
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Devices/ for more
-
-hl.device({
-	name = "logitech-g-pro--1",
-	sensitivity = 0,
-})
 
 ---------------------
 ---- KEYBINDINGS ----
@@ -359,8 +355,6 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 
 -- Example window rules that are useful
 
-hl.window_rule({ match = { xdg_tag = "proton-game" } })
-
 local suppressMaximizeRule = hl.window_rule({
 	-- Ignore maximize requests from all apps. You'll probably like this.
 	name = "suppress-maximize-events",
@@ -369,7 +363,6 @@ local suppressMaximizeRule = hl.window_rule({
 	suppress_event = "maximize",
 })
 -- suppressMaximizeRule:set_enabled(false)
-
 hl.window_rule({
 	-- Fix some dragging issues with XWayland
 	name = "fix-xwayland-drags",
