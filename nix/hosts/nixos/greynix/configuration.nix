@@ -41,6 +41,7 @@
   programs.steam = {
     enable = true;
   };
+  programs.gamemode.enable = true;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
