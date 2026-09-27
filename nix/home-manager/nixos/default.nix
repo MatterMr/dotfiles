@@ -1,11 +1,11 @@
 {
-  config,
   pkgs,
   ...
 }:
 {
   imports = [
     ../shared
+    ./mangohud.nix
     ./hyprland.nix
   ];
 
@@ -19,10 +19,9 @@
     git
     protonup-rs
     mangohud
-    gamescope
-    gamemode
     nautilus
     btop
+    (pkgs.callPackage ../../pkgs/resproxy/package.nix { })
   ];
 
   programs.fish = {
@@ -48,24 +47,4 @@
   programs.obsidian.enable = true;
   programs.mullvad-vpn.enable = true;
 
-  xdg.configFile."MangoHud/MangoHud.conf".text = ''
-                		toggle_hud=Shift_R+F12
-                		font_scale=2
-                		fps
-                		fps_metrics=avg
-                		fps_metrics=avg,0.01
-                		frametime
-                		gpu_stats
-                		gpu_temp
-                		cpu_stats
-                		cpu_temp
-                		ram
-                		vram
-                		fsr
-                		display_server
-                		present_mode
-        						fps_limit=120
-            				fps_limit_method=early
-    								winesync
-  '';
 }
