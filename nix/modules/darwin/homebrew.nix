@@ -1,7 +1,15 @@
-{ inputs, pkgs, ... }:
+{ inputs, ... }:
 {
+  imports = [ inputs.nix-homebrew.darwinModules.nix-homebrew ];
+
+  nix-homebrew = {
+    enable = true;
+    user = "mattermr";
+  };
+
   homebrew = {
     enable = true;
+    taps = [ ];
     casks = [
       "microsoft-teams"
       "windows-app"
@@ -12,7 +20,6 @@
       "skim"
       "claude"
       "docker-desktop"
-      "mullvad-vpn@beta"
       "wireshark-app"
     ];
     brews = [ ];
