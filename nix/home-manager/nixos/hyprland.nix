@@ -5,7 +5,6 @@
   ...
 }:
 {
-  imports = [ inputs.walker.homeManagerModules.default ];
   xdg.configFile."hypr/hyprland.lua".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/nix/config/hypr/hyprland.lua";
 
