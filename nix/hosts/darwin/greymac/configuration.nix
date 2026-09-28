@@ -2,7 +2,7 @@
 {
   users.users.mattermr = {
     home = "/Users/mattermr";
-    shell = pkgs.fish; # good place to set this too since you're switching
+    shell = pkgs.fish;
   };
 
   # Base Config
@@ -15,13 +15,14 @@
   programs.fish.enable = true;
   nix.package = pkgs.nix;
   nix.settings.trusted-users = [ "@admin" ];
+
   # System Settings
   system.primaryUser = "mattermr";
   system.defaults = {
     dock.autohide = true;
     dock.persistent-apps = [
       "/Users/mattermr/Applications/Home Manager Apps/kitty.app"
-      "/Applications/Nix Apps/Firefox.app"
+      "/Users/mattermr/Applications/Home Manager Apps/Firefox.app"
       "/Applications/Nix Apps/Obsidian.app"
       "/System/Applications/Mail.app"
     ];
@@ -31,14 +32,38 @@
     spaces.spans-displays = false;
     NSGlobalDomain = {
       AppleInterfaceStyle = "Dark";
+      ApplePressAndHoldEnabled = false;
       KeyRepeat = 2;
+    };
+    ".GlobalPreferences"."com.apple.mouse.scaling" = -1.0;
+    WindowManager = {
+      StandardHideWidgets = true; # hide desktop widgets (Stage Manager off)
+      StageManagerHideWidgets = true; # hide desktop widgets (Stage Manager on)
+    };
+    # Change Spotlight to Alt-Space
+    CustomUserPreferences = {
+      "com.apple.symbolichotkeys" = {
+        AppleSymbolicHotKeys = {
+          # 64 = Show Spotlight search
+          "64" = {
+            enabled = true;
+            value = {
+              type = "standard";
+              parameters = [
+                32
+                49
+                524288
+              ]; # 524288 = Option/Alt modifier
+            };
+          };
+        };
+      };
     };
   };
 
   # Base Packages
   environment.systemPackages = with pkgs; [
     nerd-fonts.hack
-    firefox
     vesktop
     obsidian
   ];

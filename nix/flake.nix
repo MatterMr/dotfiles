@@ -61,21 +61,14 @@
           specialArgs = { inherit inputs; };
           modules = [
             ./hosts/darwin/greymac/configuration.nix
+            ./modules/darwin/homebrew.nix
             home-manager.darwinModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.mattermr = ./home-manager/darwin;
               home-manager.backupFileExtension = "backup";
-            }
-            nix-homebrew.darwinModules.nix-homebrew
-            {
-              nix-homebrew = {
-                enable = true;
-                enableRosetta = false;
-                user = "mattermr";
-              };
+              home-manager.users.mattermr = ./home-manager/darwin;
             }
           ];
         };

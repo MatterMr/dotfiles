@@ -6,5 +6,6 @@
     ./nvim.nix
     ./latex.nix
     ./devtools.nix
+    ./firefox.nix
   ];
 }
