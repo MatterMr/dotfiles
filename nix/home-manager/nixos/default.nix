@@ -1,4 +1,5 @@
 {
+  inputs,
   pkgs,
   ...
 }:
@@ -21,7 +22,7 @@
     mangohud
     nautilus
     btop
-    (pkgs.callPackage ../../pkgs/resproxy/package.nix { })
+    inputs.resproxy.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   programs.fish = {
