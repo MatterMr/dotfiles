@@ -21,11 +21,13 @@
       "claude"
       "docker-desktop"
       "wireshark-app"
+      "mullvad-vpn"
     ];
     brews = [ ];
     masApps = { };
     onActivation.cleanup = "zap";
     onActivation.autoUpdate = true;
     onActivation.upgrade = true;
+    onActivation.extraFlags = [ "--verbose" ];
   };
 }
