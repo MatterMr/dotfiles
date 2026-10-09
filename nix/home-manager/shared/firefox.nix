@@ -92,11 +92,12 @@ in
         in
         {
           "*".installation_mode = "blocked";
-
+          # Ublock-Origin
           "uBlock0@raymondhill.net" = {
             install_url = moz "ublock-origin";
             installation_mode = "force_installed";
           };
+          # Vimium-ff
           "{d7742d87-e61d-4b78-b8a1-b469842139fa}" = {
             install_url = moz "vimium-ff";
             installation_mode = "force_installed";
@@ -111,6 +112,7 @@ in
             install_url = moz "bitwarden-password-manager";
             installation_mode = "force_installed";
           };
+
         };
     };
     profiles = {
