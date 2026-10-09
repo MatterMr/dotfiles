@@ -29,8 +29,6 @@
     unzip
     imagemagick
     python3
-    rustc
-    cargo
     nodejs
 
     # LSP
