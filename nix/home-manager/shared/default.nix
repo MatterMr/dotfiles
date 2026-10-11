@@ -8,4 +8,5 @@
     ./devtools.nix
     ./firefox.nix
   ];
+  home.stateVersion = "26.11";
 }

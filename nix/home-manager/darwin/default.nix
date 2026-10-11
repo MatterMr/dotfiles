@@ -9,5 +9,4 @@
 
   home.username = "mattermr";
   home.homeDirectory = "/Users/mattermr";
-  home.stateVersion = "25.11";
 }
