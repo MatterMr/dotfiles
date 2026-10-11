@@ -12,7 +12,6 @@
     taps = [ ];
     casks = [
       "microsoft-teams"
-      "windows-app"
       "karabiner-elements"
       "linearmouse"
       "zoom"
