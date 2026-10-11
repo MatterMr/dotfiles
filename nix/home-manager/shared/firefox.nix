@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, lib, ... }:
 let
   custom_css = ''
       /* Hide all tabs and tab bar buttons */
@@ -45,6 +45,9 @@ in
 {
   programs.firefox = {
     enable = true;
+
+    # macOS 27+ denies wrapped apps access to ~/Library/Application Support/Firefox
+    configPath = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin ".mozilla/firefox";
 
     languagePacks = [ "en-US" ];
 
