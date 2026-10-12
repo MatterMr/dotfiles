@@ -21,6 +21,8 @@
       "docker-desktop"
       "wireshark-app"
       "mullvad-vpn"
+      "crossover"
+      "alfred"
     ];
     brews = [ ];
     masApps = { };
