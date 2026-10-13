@@ -49,13 +49,10 @@
     wireplumber.enable = true;
   };
   services.hyprpolkitagent.enable = true;
-
-  services.cliphist.enable = true;
   wayland.windowManager.hyprland = {
     enable = true;
     package = null;
     portalPackage = null;
     systemd.enable = false;
   };
-
 }
