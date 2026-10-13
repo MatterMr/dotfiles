@@ -25,6 +25,20 @@
     "flakes"
   ];
 
+  hardware.opentabletdriver = {
+    enable = true;
+    daemon.enable = false;
+  };
+
+  # Browser (WebHID/WebUSB) access for the Wacom tablet flasher.
+  # uaccess must be tagged before 73-seat-late.rules, so extraRules (99-local) is too late.
+  services.udev.packages = [
+    (pkgs.writeTextDir "lib/udev/rules.d/70-wacom-browser.rules" ''
+      SUBSYSTEM=="hidraw", ATTRS{idVendor}=="056a", TAG+="uaccess"
+      SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0ac3", ATTR{idProduct}=="ff0f", TAG+="uaccess"
+    '')
+  ];
+
   # Set the default shell to fish
   programs.fish.enable = true;
   users.users.mattermr.shell = pkgs.fish;
