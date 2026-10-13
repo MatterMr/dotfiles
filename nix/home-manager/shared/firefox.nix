@@ -20,6 +20,9 @@ let
   sharedProfileSettings = {
     "browser.startup.homepage" = "vimium.github.io/new-tab/";
     "browser.startup.page" = 3;
+    "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
+    "layout.css.prefers-color-scheme.content-override" = 0;
+    "ui.systemUsesDarkTheme" = 1;
   };
   vimiumId = "{d7742d87-e61d-4b78-b8a1-b469842139fa}";
   treeStyleTabId = "treestyletab@piro.sakura.ne.jp";
