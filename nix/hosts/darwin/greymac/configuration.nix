@@ -11,31 +11,48 @@
   launchd.daemons.nix-daemon.serviceConfig.RunAtLoad = true;
   security.pam.services.sudo_local.touchIdAuth = true;
   nixpkgs.config.allowUnfree = true;
-  system.stateVersion = 6;
   programs.fish.enable = true;
   nix.package = pkgs.nix;
   nix.settings.trusted-users = [ "@admin" ];
 
   # System Settings
   system.primaryUser = "mattermr";
+  system.stateVersion = 6;
   system.defaults = {
-    dock.autohide = true;
-    dock.persistent-apps = [
-      "/Users/mattermr/Applications/Home Manager Apps/kitty.app"
-      "/Users/mattermr/Applications/Home Manager Apps/Firefox.app"
-      "/Applications/Nix Apps/Obsidian.app"
-      "/System/Applications/Mail.app"
-    ];
-    finder.FXPreferredViewStyle = "clmv";
-    finder.AppleShowAllFiles = true;
-    loginwindow.GuestEnabled = false;
-    spaces.spans-displays = false;
+    dock = {
+      autohide = true;
+      persistent-apps = [
+        "/Users/mattermr/Applications/Home Manager Apps/kitty.app"
+        "/Users/mattermr/Applications/Home Manager Apps/Firefox.app"
+        "/Applications/Nix Apps/Obsidian.app"
+        "/System/Applications/Mail.app"
+      ];
+    };
+    finder = {
+      AppleShowAllExtensions = true;
+      AppleShowAllFiles = true;
+      FXEnableExtensionChangeWarning = false;
+      FXPreferredViewStyle = "Clsv";
+      FXRemoveOldTrashItems = true;
+      QuitMenuItem = true;
+      ShowPathbar = true;
+      ShowStatusBar = true;
+    };
+    screencapture = {
+      location = "~/Downloads";
+      type = "png";
+      disable-shadow = true;
+      show-thumbnail = false;
+    };
     NSGlobalDomain = {
       AppleInterfaceStyle = "Dark";
       ApplePressAndHoldEnabled = false;
       KeyRepeat = 2;
+      InitialKeyRepeat = 15;
+      "com.apple.swipescrolldirection" = true;
+      "com.apple.sound.beep.volume" = 0.0;
+      "com.apple.sound.beep.feedback" = 0;
     };
-    ".GlobalPreferences"."com.apple.mouse.scaling" = -1.0;
     WindowManager = {
       StandardHideWidgets = true; # hide desktop widgets (Stage Manager off)
       StageManagerHideWidgets = true; # hide desktop widgets (Stage Manager on)
@@ -46,19 +63,15 @@
         AppleSymbolicHotKeys = {
           # 64 = Show Spotlight search
           "64" = {
-            enabled = true;
-            value = {
-              type = "standard";
-              parameters = [
-                32
-                49
-                524288
-              ]; # 524288 = Option/Alt modifier
-            };
+            enabled = false;
           };
         };
       };
     };
+    loginwindow.GuestEnabled = false;
+    spaces.spans-displays = false;
+    ".GlobalPreferences"."com.apple.mouse.scaling" = -1.0;
+    controlcenter.BatteryShowPercentage = true;
   };
 
   # Base Packages
@@ -81,16 +94,17 @@
   nixpkgs.overlays = [
     (final: prev: {
       yabai = prev.yabai.overrideAttrs (old: {
-        version = "AhsanFazal-ad0a12d";
+        version = "NightWatcher314-7.1.31";
         doInstallCheck = false;
         src = final.fetchFromGitHub {
-          owner = "AhsanFazal";
+          owner = "NightWatcher314";
           repo = "yabai";
-          rev = "ad0a12d63f639534a296a1d065b0d04979f1b4db";
-          hash = "sha256-CFC9KuBw7oyOjL5t8D+JIdk6/cdSh91J/K/8XA3v3aE=";
+          rev = "8afe28084dda66c50c30f0abc3279ce1b723ca63";
+          hash = "sha256-62TB/S1OFWjIkrKOkpF35POb5mUkoC7lF6QW6nY2eIY=";
         };
       });
     })
+
   ];
 
   # Window manager config
@@ -99,6 +113,7 @@
     enableScriptingAddition = true;
     package = pkgs.yabai;
   };
+
   services.skhd.enable = true;
   services.jankyborders = {
     enable = true;

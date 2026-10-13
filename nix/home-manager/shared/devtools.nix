@@ -12,10 +12,16 @@
     gcc
     bear
 
+    # Lanugage Support
     # OCaml
     ocaml
     dune
     ocamlPackages.utop
+
+    # Rust
+    rustlings
+    rustc
+    cargo
 
     # md to pdf compliation
     pandoc
@@ -25,5 +31,6 @@
 
     # Extra
     gitlab-runner
+
   ];
 }

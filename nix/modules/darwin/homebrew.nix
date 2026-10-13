@@ -12,7 +12,6 @@
     taps = [ ];
     casks = [
       "microsoft-teams"
-      "windows-app"
       "karabiner-elements"
       "linearmouse"
       "zoom"
@@ -21,11 +20,15 @@
       "claude"
       "docker-desktop"
       "wireshark-app"
+      "mullvad-vpn"
+      "crossover"
+      "alfred"
     ];
     brews = [ ];
     masApps = { };
     onActivation.cleanup = "zap";
     onActivation.autoUpdate = true;
     onActivation.upgrade = true;
+    onActivation.extraFlags = [ "--verbose" ];
   };
 }
