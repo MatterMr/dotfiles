@@ -39,7 +39,7 @@ hl.monitor({
 	mode = "prefered",
 	position = "auto",
 	scale = 2,
-	bitdepth = 8,
+	bitdepth = 10,
 	vrr = 2,
 })
 
