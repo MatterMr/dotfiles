@@ -13,6 +13,9 @@
   nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
   boot.kernelModules = [ "ntsync" ];
+  # Prebuilt CachyOS kernels (Hydra CI -> Attic cache)
+  nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
+  nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
 
   imports = [
     # Include the results of the hardware scan.
@@ -23,6 +26,20 @@
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
+  ];
+
+  hardware.opentabletdriver = {
+    enable = true;
+    daemon.enable = false;
+  };
+
+  # Browser (WebHID/WebUSB) access for the Wacom tablet flasher.
+  # uaccess must be tagged before 73-seat-late.rules, so extraRules (99-local) is too late.
+  services.udev.packages = [
+    (pkgs.writeTextDir "lib/udev/rules.d/70-wacom-browser.rules" ''
+      SUBSYSTEM=="hidraw", ATTRS{idVendor}=="056a", TAG+="uaccess"
+      SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0ac3", ATTR{idProduct}=="ff0f", TAG+="uaccess"
+    '')
   ];
 
   # Set the default shell to fish

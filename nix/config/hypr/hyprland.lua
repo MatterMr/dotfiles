@@ -52,14 +52,7 @@ hl.config({
 	render = {
 		direct_scanout = 1,
 	},
-	-- plugin = {
-	-- 	csgo_vulkan_fix = {
-	-- 		fix_mouse = true,
-	-- 	},
-	-- },
 })
--- hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "cs2", w = 1650, h = 1050 })
--- hl.plugin.csgo_vulkan_fix.vkfix_app({ app = "myapp", w = 1920, h = 1080 })
 -------------------
 -- MY PROGRAMS ----
 -------------------
@@ -132,7 +125,8 @@ hl.config({
 		resize_on_border = false,
 
 		-- Please see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/ before you turn this on
-		allow_tearing = false,
+		-- Only windows with the "immediate" rule tear (see osu-tearing below)
+		allow_tearing = true,
 
 		layout = "dwindle",
 	},
@@ -279,6 +273,14 @@ hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(menu))
 local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
 -- closeWindowBind:set_enabled(false)
+
+---- Select an area and open it in swappy:
+-- hl.bind(mainMod .. " + P", hl.dsp.exec_cmd('grim -g "$(slurp)" - | swappy -f -'))
+
+-- Copy a selected area directly to the clipboard, install wl-clipboard and use:
+hl.bind("CTRL + ALT + SHIFT + 4", hl.dsp.exec_cmd('grim -g "$(slurp -d)" - | wl-copy'))
+hl.bind("CTRL + ALT + SHIFT + 3", hl.dsp.exec_cmd("grim - | wl-copy"))
+
 hl.bind(
 	mainMod .. " + M",
 	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
@@ -393,4 +395,12 @@ hl.window_rule({
 
 	move = "20 monitor_h-120",
 	float = true,
+})
+
+-- Tearing for osu! only, for lower input latency
+hl.window_rule({
+	name = "osu-tearing",
+	match = { class = "^osu!?$" },
+
+	immediate = true,
 })

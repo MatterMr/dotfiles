@@ -15,13 +15,23 @@
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
-    firefox
     git
     protonup-rs
     mangohud
     nautilus
     btop
+    r2modman
+    google-chrome
+    osu-lazer-bin
     inputs.resproxy.packages.${pkgs.stdenv.hostPlatform.system}.default
+
+    # screenshot support
+    grim
+    slurp
+    swappy
+
+    # Clipboard
+    wl-clipboard
   ];
 
   programs.fish = {
@@ -45,6 +55,6 @@
 
   programs.vesktop.enable = true;
   programs.obsidian.enable = true;
-  programs.mullvad-vpn.enable = true;
+  programs.claude-code.enable = true;
 
 }

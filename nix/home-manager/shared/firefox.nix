@@ -23,6 +23,9 @@ let
     	}
   '';
   sharedProfileSettings = {
+    "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
+    "layout.css.prefers-color-scheme.content-override" = 0;
+    "ui.systemUsesDarkTheme" = 1;
     "browser.startup.homepage" = "vimium.github.io/new-tab/";
     "browser.startup.page" = 3;
     "sidebar.verticalTabs" = false;
