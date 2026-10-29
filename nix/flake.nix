@@ -59,13 +59,13 @@
           specialArgs = { inherit inputs; };
           modules = [
             ./hosts/nixos/wheynix/configuration.nix
-	    home-manager.darwinModules.home-manager
+	    home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.backupFileExtension = "backup";
               home-manager.users.mattermr = ./home-manager/nixos/wheynix.nix;
+              home-manager.backupFileExtension = "backup";
             }
           ];
         };
