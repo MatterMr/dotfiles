@@ -21,6 +21,7 @@
   system.defaults = {
     dock = {
       autohide = true;
+      mru-spaces = false;
       persistent-apps = [
         "/Users/mattermr/Applications/Home Manager Apps/kitty.app"
         "/Users/mattermr/Applications/Home Manager Apps/Firefox.app"
@@ -70,7 +71,6 @@
     };
     loginwindow.GuestEnabled = false;
     spaces.spans-displays = false;
-    ".GlobalPreferences"."com.apple.mouse.scaling" = -1.0;
     controlcenter.BatteryShowPercentage = true;
   };
 
@@ -91,6 +91,8 @@
   #     StandardErrorPath = "/var/log/obsidian-sync.err";
   #   };
   # };
+
+  # Setting to patched version of yabai for macos 27
   nixpkgs.overlays = [
     (final: prev: {
       yabai = prev.yabai.overrideAttrs (old: {
@@ -104,7 +106,6 @@
         };
       });
     })
-
   ];
 
   # Window manager config
