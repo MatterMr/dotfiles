@@ -5,15 +5,15 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-  
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
+
   nix.settings.experimental-features = [
-  	"nix-command"
-	"flakes"
-    ];
+    "nix-command"
+    "flakes"
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -21,7 +21,13 @@
 
   networking.hostName = "wheynix"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
+  #
+  systemd.targets = {
+    sleep.enable = false;
+    suspend.enable = false;
+    hibernate.enable = false;
+    hybrid-sleep.enable = false;
+  };
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
@@ -57,7 +63,10 @@
   users.users."mattermr" = {
     isNormalUser = true;
     description = "mattermr";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [
     ];
   };
@@ -68,7 +77,7 @@
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
-    neovim 
+    neovim
     git
   ];
 
@@ -84,23 +93,44 @@
 
   # Enable the OpenSSH daemon.
   services.openssh = {
-  	enable=true;
-	settings = {
-	  PasswordAuthentication=false;
-	  KbdInteractiveAuthentication=false;
-	  PermitRootLogin="no";
-	  AllowUsers =["mattermr"];
-  	};
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+      AllowUsers = [ "mattermr" ];
+    };
   };
-
 
   # Open ports in the firewall.
   networking.firewall = {
-  	enable = true;
-	allowedUDPPorts = [2456 2457 2458]; # Valheim ports
+    enable = true;
+    allowedUDPPorts = [
+      2456
+      2457
+      2458
+    ]; # Valheim ports
   };
 
-# Copy the NixOS configuration file and link it from the resulting system
+  services.cloudflare-dyndns = {
+    enable = true;
+    apiTokenFile = "/var/lib/secrets/cloudflare-token";
+    domains = [ "mattermr.dev" ];
+    proxied = false;
+    ipv4 = true;
+    ipv6 = false;
+    frequency = "*:0/5"; # systemd calendar syntax: every 5 minutes
+  };
+
+  virtualisation.docker = {
+    enable = false;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+  };
+
+  # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
   # system.copySystemConfiguration = true;
