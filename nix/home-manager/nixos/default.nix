@@ -56,5 +56,5 @@
   programs.vesktop.enable = true;
   programs.obsidian.enable = true;
   programs.claude-code.enable = true;
-
+  programs.mullvad-vpn.enable = true;
 }
