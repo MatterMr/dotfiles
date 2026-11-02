@@ -20,7 +20,6 @@
     # Hyprland Dependencys
     hyprland = {
       url = "github:hyprwm/hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     resproxy = {
       url = "path:/home/mattermr/pkgs/resproxy";

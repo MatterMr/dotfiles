@@ -19,37 +19,39 @@
 ------------------
 -- this is a test
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
--- local set_monitor_scale = function()
--- 	local scale = 2
--- 	if hl.get_monitor("DP-3").height == 1440 then
--- 		scale = 1
--- 	end
--- 	hl.monitor({
--- 		output = "DP-3",
--- 		mode = "prefered",
--- 		position = "auto",
--- 		scale = scale,
--- 		bitdepth = 10,
--- 		vrr = 2,
--- 	})
--- end
+local set_monitor_scale = function()
+	local scale = 2
+	if hl.get_monitor("DP-3").height == 1440 then
+		scale = 1
+	end
+	hl.monitor({
+		output = "DP-3",
+		mode = "prefered",
+		position = "auto",
+		scale = scale,
+		bitdepth = 8,
+		vrr = 2,
+	})
+end
 
 hl.monitor({
 	output = "DP-3",
 	mode = "prefered",
 	position = "auto",
 	scale = 2,
-	bitdepth = 10,
+	bitdepth = 8,
 	vrr = 2,
 })
 
--- hl.on("monitor.added", set_monitor_scale)
+hl.on("monitor.added", set_monitor_scale)
 
 hl.config({
 	xwayland = {
 		force_zero_scaling = true,
 	},
 	render = {
+		-- Games must render in the output's format, or every switch into
+		-- scanout is a modeset (resproxy-hypr filters formats for this)
 		direct_scanout = 1,
 	},
 })
@@ -314,7 +316,17 @@ hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 
 -- Move/resize windows with mainMod + LMB/RMB and dragging
-hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
+-- Factorio uses ALT+click itself, so forward the click to it instead of
+-- dragging the window. Just disabling the bind swallowed the click instead
+-- of letting Factorio see it, so dispatch explicitly per-window instead.
+hl.bind(mainMod .. " + mouse:272", function()
+	local w = hl.get_active_window()
+	if w and w.class == "com.factorio.Factorio" then
+		hl.dispatch(hl.dsp.pass({ window = w }))
+	else
+		hl.dispatch(hl.dsp.window.drag())
+	end
+end, { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
 
@@ -397,10 +409,34 @@ hl.window_rule({
 	float = true,
 })
 
--- Tearing for osu! only, for lower input latency
+-- Tearing for osu!, for lower input latency
 hl.window_rule({
 	name = "osu-tearing",
 	match = { class = "^osu!?$" },
+
+	immediate = true,
+})
+
+-- Tearing for The Finals, for lower input latency
+hl.window_rule({
+	name = "the-finals-tearing",
+	match = { class = "^discovery\\.exe$" },
+
+	immediate = true,
+})
+
+-- Tearing for all Proton games running on native Wayland (winewayland), for lower input latency
+hl.window_rule({
+	name = "proton-wayland-tearing",
+	match = { xdg_tag = "proton-game" },
+
+	immediate = true,
+})
+
+-- Tearing for all Proton games running under XWayland, for lower input latency
+hl.window_rule({
+	name = "proton-xwayland-tearing",
+	match = { class = "^steam_app_\\d+$" },
 
 	immediate = true,
 })
