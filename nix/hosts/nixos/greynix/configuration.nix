@@ -13,10 +13,12 @@
   nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
   boot.kernelModules = [ "ntsync" ];
-  boot.kernelParams = [ "vsyscall=emulate" ];
+  boot.kernel.sysctl = {
+    "vm.max_map_count" = 1048576;
+  };
   # Prebuilt CachyOS kernels (Hydra CI -> Attic cache)
-  nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
-  nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+  # nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
+  # nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
 
   imports = [
     # Include the results of the hardware scan.
@@ -55,9 +57,11 @@
   # Programs
   environment.systemPackages = with pkgs; [
     pwvucontrol
+    gamemode.lib
   ];
   programs.steam = {
     enable = true;
+    extest.enable = true;
   };
   programs.gamemode.enable = true;
 
@@ -110,6 +114,7 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "gamemode"
     ];
   };
 
