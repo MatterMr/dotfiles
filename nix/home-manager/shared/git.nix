@@ -9,6 +9,8 @@
       };
       init.defaultBranch = "main";
       pull.rebase = false;
+      core.editor = "nvim";
+      merge.tool = "nvimdiff";
     };
   };
 }
