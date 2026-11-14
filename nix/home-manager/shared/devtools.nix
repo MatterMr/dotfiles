@@ -33,7 +33,7 @@
     poppler
 
     # Remote
-    mosh
+    rsync
 
     # Extra
     gitlab-runner
