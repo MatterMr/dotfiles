@@ -79,6 +79,7 @@
   environment.systemPackages = with pkgs; [
     neovim
     git
+    kitty.terminfo
   ];
 
   programs.fish.enable = true;

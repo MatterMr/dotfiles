@@ -11,7 +11,8 @@ vim.g.autoformat = true
 
 -- Snacks animations
 -- Set to `false` to globally disable all snacks animations
-vim.g.snacks_animate = true
+local is_ssh = vim.env.SSH_CONNECTION ~= nil or vim.env.SSH_TTY ~= nil
+vim.g.snacks_animate = not is_ssh
 
 -- LazyVim picker to use.
 -- Can be one of: telescope, fzf
@@ -56,9 +57,17 @@ vim.g.trouble_lualine = true
 local opt = vim.opt
 
 opt.autowrite = true -- Enable auto write
--- only set clipboard if not in ssh, to make sure the OSC 52
--- integration works automatically.
-opt.clipboard = vim.env.SSH_CONNECTION and "" or "unnamedplus" -- Sync with system clipboard
+-- Sync with system clipboard; over SSH, copy to the local terminal via OSC 52
+opt.clipboard = "unnamedplus"
+if is_ssh then
+  local osc52 = require("vim.ui.clipboard.osc52")
+  local function paste() return vim.split(vim.fn.getreg('"'), "\n") end
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = { ["+"] = osc52.copy("+"), ["*"] = osc52.copy("*") },
+    paste = { ["+"] = paste, ["*"] = paste },
+  }
+end
 opt.completeopt = "menu,menuone,noselect"
 opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
