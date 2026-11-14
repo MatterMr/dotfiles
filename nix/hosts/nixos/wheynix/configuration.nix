@@ -67,8 +67,8 @@
       "networkmanager"
       "wheel"
     ];
-    packages = with pkgs; [
-    ];
+    linger = true;
+
   };
 
   # Allow unfree packages
@@ -80,6 +80,10 @@
     neovim
     git
   ];
+
+  programs.fish.enable = true;
+  users.users.mattermr.shell = pkgs.fish;
+  programs.mosh.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -110,6 +114,7 @@
       2457
       2458
     ]; # Valheim ports
+    allowedTCPPorts = [ 8080 ];
   };
 
   services.cloudflare-dyndns = {
