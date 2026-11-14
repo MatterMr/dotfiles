@@ -34,6 +34,7 @@
 
     # Remote
     rsync
+    coreutils
 
     # Extra
     gitlab-runner
