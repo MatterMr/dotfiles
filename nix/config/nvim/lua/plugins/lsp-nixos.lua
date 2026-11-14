@@ -50,7 +50,34 @@ return {
         ts_ls = {},
         templ = {},
         gleam = {},
-        clangd = {},
+        -- BEGIN CSCI442 devcontainer clangd (added by Claude, 2026-11-08)
+        -- Runs clangd inside the CSCI442 dev container for files under student-env, so
+        -- diagnostics match `make` (Linux clang + glibc headers, e.g. pthread_barrier_t).
+        -- Finds the container by its devcontainer.local_folder label; falls back to host
+        -- clangd when the file is elsewhere or the container is not running.
+        -- Requires clangd installed in the container image.
+        -- TO REMOVE: delete everything between BEGIN/END and restore `clangd = {},`
+        clangd = {
+          cmd = function(dispatchers, config)
+            local host_root = vim.fn.expand("~/Documents/college/senior/CSCI442/student-env")
+            local root = config.root_dir or vim.fn.getcwd()
+            local cmd = { "clangd", "--background-index" }
+            if root:sub(1, #host_root) == host_root then
+              local id = vim.fn.trim(vim.fn.system({
+                "docker", "ps", "-q", "--filter", "label=devcontainer.local_folder=" .. host_root,
+              }))
+              if vim.v.shell_error == 0 and id ~= "" then
+                cmd = {
+                  "docker", "exec", "-i", "-w", "/workspace" .. root:sub(#host_root + 1), id,
+                  "clangd", "--background-index",
+                  "--path-mappings=" .. host_root .. "=/workspace",
+                }
+              end
+            end
+            return vim.lsp.rpc.start(cmd, dispatchers, { cwd = root })
+          end,
+        },
+        -- END CSCI442 devcontainer clangd
       },
     },
   },
