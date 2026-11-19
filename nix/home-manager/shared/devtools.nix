@@ -11,6 +11,9 @@
     netcat
     gcc
     bear
+    gdb
+    gnumake
+    clang-tools
 
     # Lanugage Support
     # OCaml
@@ -28,6 +31,10 @@
 
     # AI helper tools
     poppler
+
+    # Remote
+    rsync
+    coreutils
 
     # Extra
     gitlab-runner

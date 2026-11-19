@@ -21,6 +21,7 @@
   system.defaults = {
     dock = {
       autohide = true;
+      mru-spaces = false;
       persistent-apps = [
         "/Users/mattermr/Applications/Home Manager Apps/kitty.app"
         "/Users/mattermr/Applications/Home Manager Apps/Firefox.app"
@@ -70,7 +71,6 @@
     };
     loginwindow.GuestEnabled = false;
     spaces.spans-displays = false;
-    ".GlobalPreferences"."com.apple.mouse.scaling" = -1.0;
     controlcenter.BatteryShowPercentage = true;
   };
 
@@ -91,20 +91,21 @@
   #     StandardErrorPath = "/var/log/obsidian-sync.err";
   #   };
   # };
+
+  # Setting to patched version of yabai for macos 27
   nixpkgs.overlays = [
     (final: prev: {
       yabai = prev.yabai.overrideAttrs (old: {
-        version = "NightWatcher314-7.1.31";
+        version = "v7.1.39";
         doInstallCheck = false;
         src = final.fetchFromGitHub {
-          owner = "NightWatcher314";
+          owner = "Christian-SC26";
           repo = "yabai";
-          rev = "8afe28084dda66c50c30f0abc3279ce1b723ca63";
-          hash = "sha256-62TB/S1OFWjIkrKOkpF35POb5mUkoC7lF6QW6nY2eIY=";
+          rev = "3540bd3afcfb21d188cc810d8244b97dcbe5595d";
+          hash = "sha256-usDobON4KTUbmTzt4F9DgDDyBh2rgd1E3S//FtFfHfo=";
         };
       });
     })
-
   ];
 
   # Window manager config

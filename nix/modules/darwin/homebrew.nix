@@ -23,6 +23,9 @@
       "mullvad-vpn"
       "crossover"
       "alfred"
+      "windows-app"
+      "balenaetcher"
+      "bitwarden"
     ];
     brews = [ ];
     masApps = { };
