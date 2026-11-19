@@ -17,9 +17,8 @@
     "vm.max_map_count" = 1048576;
   };
   # Prebuilt CachyOS kernels (Hydra CI -> Attic cache)
-  # nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
-  # nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
-
+  nix.settings.substituters = [ "https://cache.lantian.pub/lantian" ];
+  nix.settings.trusted-public-keys = [ "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ=" ];
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -61,8 +60,14 @@
   ];
   programs.steam = {
     enable = true;
-    extest.enable = true;
+    # extest.enable only preloads the 32-bit lib, but the Steam client is now 64-bit
+    # (steamrt64). Preload the 64-bit build so Steam Input mouse works on Wayland.
+    # Revisit once nixpkgs PR #520162 (extest bitness option) lands.
+    package = pkgs.steam.override {
+      extraEnv.LD_PRELOAD = "${pkgs.extest}/lib/libextest.so";
+    };
   };
+  hardware.steam-hardware.enable = true;
   programs.gamemode.enable = true;
 
   # Bootloader.

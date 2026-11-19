@@ -251,6 +251,9 @@ hl.config({
 		kb_options = "",
 		kb_rules = "",
 
+		repeat_rate = 30,
+		repeat_delay = 225,
+
 		follow_mouse = 1,
 		sensitivity = 0,
 		accel_profile = "flat",

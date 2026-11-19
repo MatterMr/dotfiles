@@ -48,17 +48,17 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.mattermr = ./home-manager/greynix.nix;
+              home-manager.users.mattermr = ./home-manager/nixos/greynix.nix;
               home-manager.backupFileExtension = "backup";
             }
           ];
         };
-	wheynix = nixpkgs.lib.nixosSystem {
+        wheynix = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
             ./hosts/nixos/wheynix/configuration.nix
-	    home-manager.nixosModules.home-manager
+            home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
