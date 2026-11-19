@@ -17,10 +17,22 @@
     PROTON_ENABLE_WAYLAND = "1";
     PROTON_USE_NTSYNC = "1";
     PROTON_FSR4_UPGRADE = "1";
+    BROWSER = "firefox";
   };
 
   xdg.configFile."uwsm/env".source =
     "${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh";
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = "firefox.desktop";
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      "x-scheme-handler/about" = "firefox.desktop";
+      "x-scheme-handler/unknown" = "firefox.desktop";
+    };
+  };
 
   services.hyprlauncher = {
     enable = true;
