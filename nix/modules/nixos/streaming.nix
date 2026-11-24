@@ -1,27 +1,12 @@
 # Moonlight streaming host (Sunshine) on a virtual Hyprland display.
 { pkgs, config, ... }:
 let
-  # VirtualHere USB client: attaches the Steam Controller puck plugged into
-  # greymac as a real USB device (USB/IP), so Steam sees the actual controller.
-  # The download URL is unversioned: a new upstream release changes the hash
-  # and the build fails until it is updated here.
-  virtualhere-client = pkgs.runCommand "virtualhere-client-6.0.3" {
-    src = pkgs.fetchurl {
-      url = "https://www.virtualhere.com/sites/default/files/usbclient/vhclientx86_64";
-      sha256 = "d66d41a12e1137ce3adec1f851987a2bfb3cc62ca96a280646abcd6d9c4ec554";
-    };
-  } "install -Dm755 $src $out/bin/vhclientx86_64";
-  vh = "${virtualhere-client}/bin/vhclientx86_64";
-  greymacVirtualHere = "192.168.1.81:7575";
-
   stream-ctl = pkgs.writeShellApplication {
     name = "stream-ctl";
     runtimeInputs = [
       config.programs.hyprland.package
       pkgs.coreutils
       pkgs.gnugrep
-      pkgs.gnused
-      virtualhere-client
     ];
     text = ''
       export XDG_RUNTIME_DIR="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
@@ -44,11 +29,6 @@ let
         done
         return 1
       }
-      # Address of the puck on greymac's VirtualHere server, if it is listed.
-      puck() {
-        timeout 10 vhclientx86_64 -t LIST 2>/dev/null \
-          | sed -n 's/.*Steam Controller Puck (\([^)]*\)).*/\1/p' | head -n1
-      }
 
       case "''${1:-status}" in
         on)
@@ -64,19 +44,8 @@ let
           # output_name = 0 is STREAM and everything opens there.
           dp3_off
           sleep 1
-          # Borrow the controller puck from greymac. Not fatal: without it,
-          # Moonlight's own gamepad input still works.
-          p="$(puck || true)"
-          if [ -n "$p" ]; then
-            timeout 20 vhclientx86_64 -t "USE,$p" || echo "puck attach failed" >&2
-          fi
           ;;
         off)
-          # Give the puck back to greymac.
-          p="$(puck || true)"
-          if [ -n "$p" ]; then
-            timeout 20 vhclientx86_64 -t "STOP USING,$p" || true
-          fi
           dp3_on
           if ! wait_for DP-3; then
             hyprctl reload
@@ -87,7 +56,6 @@ let
           ;;
         status)
           hyprctl monitors | grep -A1 "^Monitor"
-          timeout 10 vhclientx86_64 -t LIST 2>/dev/null | grep -A3 "Hub" || echo "VirtualHere client not running"
           ;;
         *)
           echo "usage: stream-ctl [status|on|off]" >&2
@@ -97,9 +65,29 @@ let
     '';
   };
   ctl = "${stream-ctl}/bin/stream-ctl";
+
+  stream-login = pkgs.writeShellApplication {
+    name = "stream-login";
+    runtimeInputs = [
+      pkgs.systemd
+      pkgs.gnugrep
+    ];
+    text = ''
+      # Starting the service takes over tty1, so never do it over a live session.
+      if loginctl list-sessions --no-legend | grep -qw seat0; then
+        echo "already logged in"
+        exit 0
+      fi
+      sudo systemctl start stream-login.service
+      echo "logging in; give Hyprland and Sunshine a few seconds"
+    '';
+  };
 in
 {
-  environment.systemPackages = [ stream-ctl ];
+  environment.systemPackages = [
+    stream-ctl
+    stream-login
+  ];
 
   services.sunshine = {
     enable = true;
@@ -132,22 +120,6 @@ in
   };
   services.avahi.enable = false;
 
-  # VirtualHere client (runs as root; its control pipe /tmp/vhclient is
-  # world-writable, which is how stream-ctl attaches the puck).
-  boot.kernelModules = [ "vhci_hcd" ];
-  systemd.services.virtualhere-client = {
-    description = "VirtualHere USB client (Steam Controller puck from greymac)";
-    wantedBy = [ "multi-user.target" ];
-    wants = [ "network-online.target" ];
-    after = [ "network-online.target" ];
-    serviceConfig = {
-      ExecStart = "${vh} -e -c /var/lib/virtualhere/config.ini";
-      ExecStartPost = "${pkgs.bash}/bin/sh -c 'sleep 2; ${vh} -t \"MANUAL HUB ADD,${greymacVirtualHere}\"'";
-      StateDirectory = "virtualhere";
-      Restart = "on-failure";
-    };
-  };
-
   # Home network only. Tailscale traffic arrives through wheynix, so it
   # also comes from this subnet. Port 47990 (admin page) stays closed.
   networking.firewall.extraCommands = ''
@@ -160,5 +132,29 @@ in
 
   # Remote power-on
   networking.interfaces.enp16s0.wakeOnLan.enable = true;
-  services.getty.autologinUser = "mattermr";
+
+  # No auto-login at boot. Running `stream-login` over SSH (key + sudo password)
+  # starts the tty1 session.
+  systemd.services.stream-login = {
+    description = "Log mattermr in on tty1 for streaming";
+    conflicts = [ "getty@tty1.service" ];
+    after = [ "getty@tty1.service" ];
+    # A rebuild must not kill the running session.
+    restartIfChanged = false;
+    serviceConfig = {
+      ExecStart = "${pkgs.util-linux}/bin/agetty --autologin mattermr --login-program ${config.services.getty.loginProgram} --noclear --keep-baud tty1 115200,38400,9600 linux";
+      # Back to the password prompt when the session ends.
+      ExecStopPost = "${pkgs.systemd}/bin/systemctl --no-block start getty@tty1.service";
+      StandardInput = "tty";
+      StandardOutput = "tty";
+      TTYPath = "/dev/tty1";
+      TTYReset = true;
+      TTYVHangup = true;
+      UtmpIdentifier = "tty1";
+      KillMode = "process";
+      SendSIGHUP = true;
+      IgnoreSIGPIPE = false;
+      Restart = "no";
+    };
+  };
 }
