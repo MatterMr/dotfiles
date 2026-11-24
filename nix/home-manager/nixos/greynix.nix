@@ -23,7 +23,6 @@
     r2modman
     google-chrome
     osu-lazer-bin
-    inputs.resproxy.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     # screenshot support
     grim

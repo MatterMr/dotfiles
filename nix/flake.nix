@@ -21,10 +21,6 @@
     hyprland = {
       url = "github:hyprwm/hyprland";
     };
-    resproxy = {
-      url = "path:/home/mattermr/pkgs/resproxy";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
