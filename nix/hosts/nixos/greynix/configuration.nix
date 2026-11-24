@@ -23,6 +23,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../../modules/nixos/hyprland.nix
+    ../../../modules/nixos/streaming.nix
   ];
 
   nix.settings.experimental-features = [
@@ -69,6 +70,16 @@
   };
   hardware.steam-hardware.enable = true;
   programs.gamemode.enable = true;
+
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+      AllowUsers = [ "mattermr" ];
+    };
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;

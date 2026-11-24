@@ -20,14 +20,18 @@
 -- this is a test
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 local set_monitor_scale = function()
+	local dp3 = hl.get_monitor("DP-3")
+	if not dp3 then
+		return -- off while streaming (stream-ctl)
+	end
 	local scale = 2
-	if hl.get_monitor("DP-3").height == 1440 then
+	if dp3.height == 1440 then
 		scale = 1
 	end
 	hl.monitor({
 		output = "DP-3",
 		mode = "prefered",
-		position = "auto",
+		position = "0x0",
 		scale = scale,
 		bitdepth = 8,
 		vrr = 2,
@@ -37,7 +41,7 @@ end
 hl.monitor({
 	output = "DP-3",
 	mode = "prefered",
-	position = "auto",
+	position = "0x0",
 	scale = 2,
 	bitdepth = 8,
 	vrr = 2,
@@ -290,6 +294,8 @@ hl.bind(
 	mainMod .. " + M",
 	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
 )
+-- Emergency: end stream mode and bring DP-3 back
+hl.bind("CTRL + ALT + SHIFT + D", hl.dsp.exec_cmd("stream-ctl off"), { locked = true })
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))

@@ -118,6 +118,35 @@
     allowedTCPPorts = [ 8080 ];
   };
 
+  # Route to the gaming PC only, so it works even when the remote network
+  # also uses 192.168.1.x.
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "server";
+    extraSetFlags = [ "--advertise-routes=192.168.1.67/32" ];
+  };
+  users.users.mattermr.packages = [
+    (pkgs.writeShellApplication {
+      name = "wake-greynix";
+      runtimeInputs = [
+        pkgs.wakeonlan
+        pkgs.iputils
+      ];
+      text = ''
+        wakeonlan -i 192.168.1.255 fc:9d:05:07:b4:86
+        for _ in $(seq 60); do
+          if ping -c1 -W2 192.168.1.67 >/dev/null 2>&1; then
+            echo "greynix is up"
+            exit 0
+          fi
+          sleep 1
+        done
+        echo "greynix did not wake" >&2
+        exit 1
+      '';
+    })
+  ];
+
   services.cloudflare-dyndns = {
     enable = true;
     apiTokenFile = "/var/lib/secrets/cloudflare-token";
