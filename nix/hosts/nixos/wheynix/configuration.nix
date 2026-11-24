@@ -125,6 +125,18 @@
     useRoutingFeatures = "server";
     extraSetFlags = [ "--advertise-routes=192.168.1.67/32" ];
   };
+  # Faster UDP forwarding for the Tailscale route. ethtool settings are lost on
+  # reboot, so reapply them whenever the link comes up.
+  # https://tailscale.com/kb/1320/performance-best-practices
+  networking.networkmanager.dispatcherScripts = [
+    {
+      source = pkgs.writeShellScript "tailscale-udp-gro" ''
+        if [ "$1" = "enp12s0" ] && [ "$2" = "up" ]; then
+          ${pkgs.ethtool}/bin/ethtool -K "$1" rx-udp-gro-forwarding on rx-gro-list off
+        fi
+      '';
+    }
+  ];
   users.users.mattermr.packages = [
     (pkgs.writeShellApplication {
       name = "wake-greynix";
